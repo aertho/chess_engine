@@ -1,8 +1,6 @@
-from board import Board
-
-
 class Square:
     def __init__(self, file, rank):
+        from board import Board
         assert file in Board.FILES
         assert rank in Board.RANKS
         self.file = file

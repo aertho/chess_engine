@@ -15,5 +15,3 @@ class Board:
         file = ord(file) - ord('a')
         rank = ord(rank) - ord('1')
         return self.squares[rank][file]
-
-

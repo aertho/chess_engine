@@ -1,11 +1,4 @@
-class Square:
-    def __init__(self, file, rank):
-        self.file = file
-        self.rank = rank
-        self.piece = None
-
-    def __repr__(self):
-        return '<Square(file={}, rank={})>'.format(self.file, self.rank)
+from square import Square
 
 
 class Board:
@@ -22,3 +15,5 @@ class Board:
         file = ord(file) - ord('a')
         rank = ord(rank) - ord('1')
         return self.squares[rank][file]
+
+

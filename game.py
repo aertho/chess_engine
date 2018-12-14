@@ -23,30 +23,42 @@ def chess_set():
     return board, white_pieces, black_pieces
 
 
+def set_board(board, white_pieces, black_pieces):
+    for file, p in zip(Board.FILES, pieces_of(white_pieces, Pawn)):
+        board[file, '2'].set_piece(p)
+    for file, p in zip(['a', 'h'], pieces_of(white_pieces, Rook)):
+        board[file, '1'].set_piece(p)
+    for file, p in zip(['b', 'g'], pieces_of(white_pieces, Knight)):
+        board[file, '1'].set_piece(p)
+    for file, p in zip(['c', 'f'], pieces_of(white_pieces, Bishop)):
+        board[file, '1'].set_piece(p)
+    board['d', '1'].set_piece(pieces_of(white_pieces, Queen)[0])
+    board['e', '1'].set_piece((pieces_of(white_pieces, King)[0]))
+
+    for file, p in zip(Board.FILES, pieces_of(black_pieces, Pawn)):
+        board[file, '7'].set_piece(p)
+    for file, p in zip(['a', 'h'], pieces_of(black_pieces, Rook)):
+        board[file, '8'].set_piece(p)
+    for file, p in zip(['b', 'g'], pieces_of(black_pieces, Knight)):
+        board[file, '8'].set_piece(p)
+    for file, p in zip(['c', 'f'], pieces_of(black_pieces, Bishop)):
+        board[file, '8'].set_piece(p)
+    board['d', '8'].set_piece(pieces_of(black_pieces, Queen)[0])
+    board['e', '8'].set_piece((pieces_of(black_pieces, King)[0]))
+
+
 class Game:
     def __init__(self):
         self.board, self.white_pieces, self.black_pieces = chess_set()
         self.reset_game()
+        self.white_moves = []
+        self.black_moves = []
+
+    @property
+    def turn(self):
+        if len(self.white_moves) > len(self.black_moves):
+            return Colour.BLACK
+        return Colour.WHITE
 
     def reset_game(self):
-        for file, p in zip(Board.FILES, pieces_of(self.white_pieces, Pawn)):
-            self.board[file, '2'].set_piece(p)
-        for file, p in zip(['a', 'h'], pieces_of(self.white_pieces, Rook)):
-            self.board[file, '1'].set_piece(p)
-        for file, p in zip(['b', 'g'], pieces_of(self.white_pieces, Knight)):
-            self.board[file, '1'].set_piece(p)
-        for file, p in zip(['c', 'f'], pieces_of(self.white_pieces, Bishop)):
-            self.board[file, '1'].set_piece(p)
-        self.board['d', '1'].set_piece(pieces_of(self.white_pieces, Queen)[0])
-        self.board['e', '1'].set_piece((pieces_of(self.white_pieces, King)[0]))
-
-        for file, p in zip(Board.FILES, pieces_of(self.black_pieces, Pawn)):
-            self.board[file, '7'].set_piece(p)
-        for file, p in zip(['a', 'h'], pieces_of(self.black_pieces, Rook)):
-            self.board[file, '8'].set_piece(p)
-        for file, p in zip(['b', 'g'], pieces_of(self.black_pieces, Knight)):
-            self.board[file, '8'].set_piece(p)
-        for file, p in zip(['c', 'f'], pieces_of(self.black_pieces, Bishop)):
-            self.board[file, '8'].set_piece(p)
-        self.board['d', '8'].set_piece(pieces_of(self.black_pieces, Queen)[0])
-        self.board['e', '8'].set_piece((pieces_of(self.black_pieces, King)[0]))
+        set_board(self.board, self.white_pieces, self.black_pieces)

@@ -12,6 +12,9 @@ class Piece:
         self.colour = colour
         self.square = None
 
+    def __repr__(self):
+        return "<{} {}>".format(self.colour, self.__class__.__name__)
+
 
 class Pawn(Piece):
     pass

@@ -18,3 +18,7 @@ class Square:
     def remove_piece(self):
         self.piece.square = None
         self.piece = None
+
+    def __sub__(self, other):
+        assert isinstance(other, Square)
+        return ord(self.file) - ord(other.file), ord(self.rank) - ord(other.rank)

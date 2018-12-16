@@ -45,10 +45,17 @@ class Move:
 
 
 class OrdinaryMove(Move):
-    def __init__(self, number, from_square, to_square):
+    def __init__(self, number, from_square, to_square, is_capture=False):
         assert from_square.piece is not None
+        assert from_square.piece.valid_change(to_square, is_capture)
         super().__init__(number, from_square.piece.colour)
+        self.from_square = from_square
+        self.to_square = to_square
+        self.piece = from_square.piece
+        self.is_capture = is_capture
         self.transformations.append(RemovalTransformation(from_square))
-        if to_square.piece is not None:
+        if is_capture:
+            assert to_square.piece is not None
+            assert to_square.piece.colour != from_square.piece.colour
             self.transformations.append((RemovalTransformation(to_square)))
         self.transformations.append(SetTransformation(to_square, from_square.piece))

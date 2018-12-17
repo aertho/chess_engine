@@ -2,7 +2,7 @@ import pytest
 
 from board import Board
 from utils import colour_pieces, set_board
-from move import Move, RemovalTransformation, SetTransformation, OrdinaryMove
+from move import Move, RemovalTransformation, SetTransformation, OrdinaryMove, CaptureMove
 from piece import Colour, Pawn
 
 
@@ -15,25 +15,25 @@ def board():
 
 
 def test_move(board):
-    move = Move(0, Colour.WHITE)
-    from_square = board['e2']
-    to_square = board['e4']
-    piece = from_square.piece
-    move.transformations = [RemovalTransformation(from_square),
-                            SetTransformation(to_square, piece)]
-    move.apply()
-    assert from_square.piece is None
-    assert to_square.piece is piece
+    from_square = 'e2'
+    to_square = 'e4'
+    move = Move(0, Colour.WHITE, from_square, to_square)
+    piece = board[from_square].piece
+    move.transformations.append(RemovalTransformation(from_square))
+    move.transformations.append(SetTransformation(to_square, move.transformations[0]))
+    move.apply(board)
+    assert board[from_square].piece is None
+    assert board[to_square].piece is piece
 
 
 def test_ordinary_move(board):
-    from_square = board['e2']
-    to_square = board['e4']
-    piece = board['e2'].piece
-    move = OrdinaryMove(0, from_square, to_square)
-    move.apply()
-    assert from_square.piece is None
-    assert to_square.piece is piece
+    from_square = 'e2'
+    to_square = 'e4'
+    piece = board[from_square].piece
+    move = OrdinaryMove(0, Colour.WHITE, from_square, to_square)
+    move.apply(board)
+    assert board[from_square].piece is None
+    assert board[to_square].piece is piece
 
 
 def test_ordinary_move_capture():
@@ -42,8 +42,8 @@ def test_ordinary_move_capture():
     black_pawn = Pawn(Colour.BLACK)
     board['e4'].set_piece(white_pawn)
     board['d5'].set_piece(black_pawn)
-    move = OrdinaryMove(1, board['e4'], board['d5'])
-    move.apply()
+    move = CaptureMove(1, Colour.WHITE, 'e4', 'd5')
+    move.apply(board)
     assert black_pawn.square is None
     assert board['d5'].piece is white_pawn
     assert board['e4'].piece is None

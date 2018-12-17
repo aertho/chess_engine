@@ -1,8 +1,15 @@
+def valid_square_coordinates(file, rank=''):
+    from board import Board
+    if not ((len(file) == 1 and len(rank) == 1) or (len(file) == 2 and len(rank) == 0)):
+        return False
+    if len(file) == 2:
+        file, rank = file[:]
+    return file in Board.FILES and rank in Board.RANKS
+
+
 class Square:
     def __init__(self, file, rank):
-        from board import Board
-        assert file in Board.FILES
-        assert rank in Board.RANKS
+        assert valid_square_coordinates(file, rank)
         self.file = file
         self.rank = rank
         self.piece = None

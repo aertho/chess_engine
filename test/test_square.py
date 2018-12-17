@@ -1,5 +1,14 @@
-from square import Square
+from square import Square, valid_square_coordinates
 from piece import Rook, Colour
+
+
+def test_is_valid_square_coordinates():
+    for f in 'abcdefgh':
+        for r in '12345678':
+            assert valid_square_coordinates(f, r)
+            assert valid_square_coordinates(f + r)
+    assert not valid_square_coordinates('i', '8')
+    assert not valid_square_coordinates('h', '9')
 
 
 def test_set_piece():
